@@ -422,13 +422,6 @@ class Path(object):
 
         self.load(path)
 
-    def copy(self):
-        return self.__class__(
-            path=self.segments,
-            force_absolute=self._force_absolute,
-            strict=self.strict
-        )
-
     def load(self, path):
         """
         Load <path>, replacing any existing path. <path> can either be a
@@ -560,7 +553,11 @@ class Path(object):
         return not self.isdir
 
     def __truediv__(self, path):
-        return self.copy().add(path)
+        copy = self.__class__(
+            path=self.segments,
+            force_absolute=self._force_absolute,
+            strict=self.strict)
+        return copy.add(path)
 
     def __eq__(self, other):
         return str(self) == str(other)
