@@ -371,6 +371,12 @@ def remove_path_segments(segments, remove):
     return ret
 
 
+def quacks_like_a_path_with_segments(obj):
+    return (
+        hasattr(obj, 'segments') and
+        is_iterable_but_not_string(obj.segments))
+
+
 class Path(object):
 
     """
@@ -431,7 +437,7 @@ class Path(object):
         """
         if not path:
             segments = []
-        elif isinstance(path, Path):
+        elif quacks_like_a_path_with_segments(path):  # Path interface.
             segments = path.segments
         elif is_iterable_but_not_string(path):  # List interface.
             segments = path
@@ -457,7 +463,7 @@ class Path(object):
 
         Returns: <self>.
         """
-        if isinstance(path, Path):
+        if quacks_like_a_path_with_segments(path):  # Path interface.
             newsegments = path.segments
         elif is_iterable_but_not_string(path):  # List interface.
             newsegments = path
